@@ -1,18 +1,27 @@
--- Tabel untuk kategori produk
-CREATE TABLE Kategori (
-    id_kategori INT AUTO_INCREMENT PRIMARY KEY,
-    nama_kategori VARCHAR(100) NOT NULL
+-- Tabel untuk distributor
+CREATE TABLE Distributor (
+    id_distributor INT AUTO_INCREMENT PRIMARY KEY,
+    kode_distributor VARCHAR(20) UNIQUE NOT NULL,
+    nama_distributor VARCHAR(100) NOT NULL
 );
+
+INSERT INTO Distributor (kode_distributor, nama_distributor) VALUES
+('MB42647', 'PT. Maju Bersama'),
+('WI813197', 'PT. Wisma Indah'),
+('BI37621', 'PT. Bangun Indah'),
+('PB63927', 'PT. Permata Bakti'),
+('BN82740', 'PT. Bakti Negara');
 
 -- Tabel untuk produk
 CREATE TABLE Produk (
     id_produk INT AUTO_INCREMENT PRIMARY KEY,
-    id_kategori INT NOT NULL,
     nama_produk VARCHAR(100) NOT NULL,
-    distributor VARCHAR(100),
+    id_distributor INT NOT NULL,  -- Menggunakan ID distributor
+    nama_distributor VARCHAR(100) NOT NULL,  -- Nama distributor disertakan untuk mempermudah query
+    kategori VARCHAR(100) NOT NULL,  -- Kategori digabungkan menjadi kolom di tabel produk
     stok INT NOT NULL,
     harga DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (id_kategori) REFERENCES Kategori(id_kategori)
+    FOREIGN KEY (id_distributor) REFERENCES Distributor(id_distributor)
 );
 
 -- Tabel untuk admin (pengguna)
@@ -23,23 +32,22 @@ CREATE TABLE Admin (
     nama_admin VARCHAR(100) NOT NULL
 );
 
--- Tabel untuk transaksi
-CREATE TABLE Transaksi (
+INSERT INTO admin (username, password, nama_admin) VALUES
+('admin', '1234', 'kita bersama');
+
+-- Tabel gabungan untuk transaksi dan detail transaksi
+CREATE TABLE TransaksiDetail (
     id_transaksi INT AUTO_INCREMENT PRIMARY KEY,
     id_admin INT NOT NULL,
-    tanggal_transaksi DATETIME DEFAULT CURRENT_TIMESTAMP,
-    total_harga DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (id_admin) REFERENCES Admin(id_admin)
-);
-
--- Tabel untuk detail transaksi
-CREATE TABLE DetailTransaksi (
-    id_detail INT AUTO_INCREMENT PRIMARY KEY,
-    id_transaksi INT NOT NULL,
     id_produk INT NOT NULL,
+    nama_produk VARCHAR(100) NOT NULL,
+    kategori VARCHAR(100) NOT NULL,
     jumlah INT NOT NULL,
     harga_satuan DECIMAL(10, 2) NOT NULL,
     subtotal DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (id_transaksi) REFERENCES Transaksi(id_transaksi),
+    tanggal_transaksi DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total_harga DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_admin) REFERENCES Admin(id_admin),
     FOREIGN KEY (id_produk) REFERENCES Produk(id_produk)
 );
+
