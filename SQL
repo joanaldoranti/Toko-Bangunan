@@ -1,7 +1,46 @@
+-- Tabel untuk kategori produk
+CREATE TABLE Kategori (
+    id_kategori INT AUTO_INCREMENT PRIMARY KEY,
+    nama_kategori VARCHAR(100) NOT NULL,
+    deskripsi TEXT
+);
+
+-- Tabel untuk produk
 CREATE TABLE Produk (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nama VARCHAR(50) NOT NULL,
-    kategori VARCHAR(50) NOT NULL,
+    id_produk INT AUTO_INCREMENT PRIMARY KEY,
+    id_kategori INT NOT NULL,
+    nama_produk VARCHAR(100) NOT NULL,
+    distributor VARCHAR(100),
     stok INT NOT NULL,
-    harga DOUBLE NOT NULL
+    harga DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_kategori) REFERENCES Kategori(id_kategori)
+);
+
+-- Tabel untuk admin (pengguna)
+CREATE TABLE Admin (
+    id_admin INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(8) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nama_admin VARCHAR(100) NOT NULL
+);
+
+-- Tabel untuk transaksi
+CREATE TABLE Transaksi (
+    id_transaksi INT AUTO_INCREMENT PRIMARY KEY,
+    id_admin INT NOT NULL,
+    tanggal_transaksi DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total_harga DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_admin) REFERENCES Admin(id_admin)
+);
+
+-- Tabel untuk detail transaksi
+CREATE TABLE DetailTransaksi (
+    id_detail INT AUTO_INCREMENT PRIMARY KEY,
+    id_transaksi INT NOT NULL,
+    id_produk INT NOT NULL,
+    jumlah INT NOT NULL,
+    harga_satuan DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (id_transaksi) REFERENCES Transaksi(id_transaksi),
+    FOREIGN KEY (id_produk) REFERENCES Produk(id_produk)
 );
