@@ -112,8 +112,7 @@ CREATE TABLE `transaksidetail` (
   `jumlah` int(11) NOT NULL,
   `harga_satuan` decimal(10,2) NOT NULL,
   `subtotal` decimal(10,2) NOT NULL,
-  `tanggal_transaksi` datetime DEFAULT current_timestamp(),
-  `total_harga` decimal(10,2) NOT NULL
+  `tanggal_transaksi` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
